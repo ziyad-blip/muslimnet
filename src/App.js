@@ -1,24 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  MapPin,
-  Clock,
-  Compass,
-  CalendarDays,
-  BookOpen,
-  SunMoon,
-  HeartHandshake,
-  Mail,
-  Bell,
-  Globe,
-  Timer,
-  Book,
-  Heart,
-  PlayCircle,
-  MessageCircle,
-  Mic,
-  Repeat
+  Repeat,
+  Timer
 } from "lucide-react";
-import axios from "axios";
+import AzanTimes from "./AzanTimes";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -28,13 +13,11 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function MusalliWebsite() {
-  const [location, setLocation] = useState(null);
-  const [theme, setTheme] = useState("light");
   const [tasbeehCount, setTasbeehCount] = useState(() => {
     const savedCount = localStorage.getItem("tasbeehCount");
     return savedCount ? parseInt(savedCount) : 0;
@@ -52,7 +35,7 @@ export default function MusalliWebsite() {
   useEffect(() => {
     localStorage.setItem("tasbeehCount", tasbeehCount);
     const today = new Date().toLocaleDateString("ar-EG");
-    setDailyStats(prev => {
+    setDailyStats((prev) => {
       const updated = { ...prev, [today]: tasbeehCount };
       localStorage.setItem("dailyStats", JSON.stringify(updated));
       return updated;
@@ -61,7 +44,7 @@ export default function MusalliWebsite() {
 
   useEffect(() => {
     if ("Notification" in window) {
-      Notification.requestPermission().then(permission => {
+      Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
           const now = new Date();
           const next = new Date();
@@ -70,7 +53,7 @@ export default function MusalliWebsite() {
           setTimeout(() => {
             new Notification("تذكير بالسبحة", {
               body: "لا تنسَ ذكر الله اليوم 🌙",
-              icon: "https://cdn-icons-png.flaticon.com/512/3448/3448610.png"
+              icon: "https://cdn-icons-png.flaticon.com/512/3448/3448610.png",
             });
           }, timeout);
         }
@@ -86,7 +69,9 @@ export default function MusalliWebsite() {
       setZekrIndex(nextIndex);
       setCurrentZekr(zekrList[nextIndex]);
     }
-    const clickSound = new Audio("https://www.soundjay.com/buttons/sounds/button-16.mp3");
+    const clickSound = new Audio(
+      "https://www.soundjay.com/buttons/sounds/button-16.mp3"
+    );
     clickSound.play();
   };
 
@@ -101,7 +86,7 @@ export default function MusalliWebsite() {
   const startTimer = () => {
     if (!intervalId) {
       const id = setInterval(() => {
-        setTimer(prev => prev + 1);
+        setTimer((prev) => prev + 1);
       }, 1000);
       setIntervalId(id);
     }
@@ -110,7 +95,7 @@ export default function MusalliWebsite() {
   const formatTime = (sec) => {
     const minutes = Math.floor(sec / 60);
     const seconds = sec % 60;
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
   const chartData = {
@@ -124,7 +109,7 @@ export default function MusalliWebsite() {
     ],
   };
 
-  // Simple button style (you can improve later)
+  // Simple button styles
   const buttonStyle = {
     padding: "0.5rem 1rem",
     borderRadius: "6px",
@@ -138,7 +123,7 @@ export default function MusalliWebsite() {
 
   const buttonSecondaryStyle = {
     ...buttonStyle,
-    backgroundColor: "#6b7280", // gray-500
+    backgroundColor: "#6b7280",
   };
 
   const buttonOutlineStyle = {
@@ -157,32 +142,75 @@ export default function MusalliWebsite() {
         margin: "0 auto",
         display: "grid",
         gap: "1.5rem",
-        backgroundColor: theme === "light" ? "#f3f4f6" : "#111827",
-        color: theme === "light" ? "black" : "white",
+        backgroundColor: "#f3f4f6",
+        color: "black",
         minHeight: "100vh",
       }}
     >
+      {/* Azan Times Section */}
       <section>
-        <h2 style={{ fontSize: "1.5rem", fontWeight: "600", marginBottom: "0.75rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <AzanTimes />
+      </section>
+
+      {/* Tasbeeh Section */}
+      <section>
+        <h2
+          style={{
+            fontSize: "1.5rem",
+            fontWeight: "600",
+            marginBottom: "0.75rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
+        >
           <Repeat size={24} /> السبحة الإلكترونية
         </h2>
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <span style={{ fontSize: "1.125rem", color: "#6b7280" /* gray-500 */ }}>الذكر الحالي</span>
-              <span style={{ fontSize: "1.5rem", fontWeight: "600" }}>{currentZekr}</span>
+          <div
+            style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+          >
+            <div
+              style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+            >
+              <span
+                style={{ fontSize: "1.125rem", color: "#6b7280" }}
+              >
+                الذكر الحالي
+              </span>
+              <span style={{ fontSize: "1.5rem", fontWeight: "600" }}>
+                {currentZekr}
+              </span>
             </div>
-            <span style={{ fontSize: "1.875rem", fontWeight: "700" }}>{tasbeehCount}</span>
-            <button onClick={handleTasbeeh} style={buttonStyle}>سبّح</button>
-            <button onClick={resetTasbeeh} style={buttonSecondaryStyle}>إعادة</button>
+            <span style={{ fontSize: "1.875rem", fontWeight: "700" }}>
+              {tasbeehCount}
+            </span>
+            <button onClick={handleTasbeeh} style={buttonStyle}>
+              سبّح
+            </button>
+            <button onClick={resetTasbeeh} style={buttonSecondaryStyle}>
+              إعادة
+            </button>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <div
+            style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
+          >
             <Timer size={20} />
             <span>مدة التسبيح: {formatTime(timer)}</span>
-            <button onClick={startTimer} style={buttonOutlineStyle}>ابدأ المؤقت</button>
+            <button onClick={startTimer} style={buttonOutlineStyle}>
+              ابدأ المؤقت
+            </button>
           </div>
           <div style={{ marginTop: "1.5rem" }}>
-            <h3 style={{ fontSize: "1.125rem", fontWeight: "600", marginBottom: "0.5rem" }}>الإحصائيات اليومية</h3>
+            <h3
+              style={{
+                fontSize: "1.125rem",
+                fontWeight: "600",
+                marginBottom: "0.5rem",
+              }}
+            >
+              الإحصائيات اليومية
+            </h3>
             <Bar data={chartData} />
           </div>
         </div>
