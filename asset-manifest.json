@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/muslimnet/static/css/main.e6c13ad2.css",
-    "main.js": "/muslimnet/static/js/main.216dbc7d.js",
+    "main.js": "/muslimnet/static/js/main.2072bc68.js",
     "static/js/453.0cfecf0d.chunk.js": "/muslimnet/static/js/453.0cfecf0d.chunk.js",
     "index.html": "/muslimnet/index.html",
     "main.e6c13ad2.css.map": "/muslimnet/static/css/main.e6c13ad2.css.map",
-    "main.216dbc7d.js.map": "/muslimnet/static/js/main.216dbc7d.js.map",
+    "main.2072bc68.js.map": "/muslimnet/static/js/main.2072bc68.js.map",
     "453.0cfecf0d.chunk.js.map": "/muslimnet/static/js/453.0cfecf0d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.216dbc7d.js"
+    "static/js/main.2072bc68.js"
   ]
 }
